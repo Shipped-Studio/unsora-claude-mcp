@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import type { AuthInfo } from "@modelcontextprotocol/sdk/server/auth/types.js";
@@ -114,8 +115,8 @@ const GENERATION_KINDS = Object.keys(GENERATIONS) as [
 ];
 
 /*
- * ChatGPT requires readOnlyHint, destructiveHint and openWorldHint on every
- * tool, and reviewers check them against what the tool actually does.
+ * Every tool declares readOnlyHint, destructiveHint and openWorldHint;
+ * directory reviewers check them against what the tool actually does.
  */
 
 /** Only reads (hosts may skip the approval prompt). */
@@ -327,15 +328,16 @@ const MEDIA_DOMAINS = (
   .map((d) => d.trim())
   .filter(Boolean);
 
-/**
- * Dedicated origin ChatGPT renders this plugin's widgets under. Required when
- * submitting a plugin with UI and must be unique per plugin; defaults to the
- * MCP server's own origin.
- */
-function widgetDomain(): string | undefined {
-  if (process.env.MCP_WIDGET_DOMAIN) return process.env.MCP_WIDGET_DOMAIN;
+/** Stable per-server origin Claude uses for the app sandbox (RFC: SEP-1865). */
+function claudeAppDomain(): string | undefined {
   const publicUrl = process.env.MCP_PUBLIC_URL;
-  return publicUrl ? new URL(publicUrl).origin : undefined;
+  if (!publicUrl) return undefined;
+  const resourceUrl = `${publicUrl}${process.env.MCP_PATH || "/mcp"}`;
+  const hash = createHash("sha256")
+    .update(resourceUrl)
+    .digest("hex")
+    .slice(0, 32);
+  return `${hash}.claudemcpcontent.com`;
 }
 
 /** Where connected accounts' profile pictures are served from. */
@@ -356,7 +358,7 @@ function resourceUiMeta(extraDomains: readonly string[] = []): ResourceUiMeta {
   const meta: ResourceUiMeta = {
     csp: { resourceDomains: [...MEDIA_DOMAINS, ...extraDomains] },
   };
-  const domain = widgetDomain();
+  const domain = claudeAppDomain();
   if (domain) meta.domain = domain;
   return meta;
 }

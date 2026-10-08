@@ -16,10 +16,6 @@ const schema = z.object({
   MCP_PATH: optional,
   MCP_ALLOWED_HOSTS: required,
   MCP_SERVER_NAME: optional,
-  // Widget sandbox origin for ChatGPT; defaults to MCP_PUBLIC_URL's origin.
-  MCP_WIDGET_DOMAIN: optional,
-  // Token from the OpenAI Plugins dashboard's domain verification step.
-  OPENAI_APPS_CHALLENGE_TOKEN: optional,
 
   CLERK_PUBLISHABLE_KEY: required,
   CLERK_SECRET_KEY: required,

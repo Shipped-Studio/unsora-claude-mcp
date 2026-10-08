@@ -1,12 +1,12 @@
 {
-  "name": "@unsora/chatgpt-mcp",
+  "name": "@unsora/claude-mcp",
   "private": true,
   "license": "AGPL-3.0-only",
   "version": "1.0.0",
-  "description": "Unsora MCP server packaged for ChatGPT plugin submission (Streamable HTTP)",
+  "description": "Unsora Scheduler MCP server for Claude: clipping and social post scheduling (Streamable HTTP)",
   "type": "module",
   "bin": {
-    "unsora-chatgpt-mcp": "./dist/index.js"
+    "unsora-claude-mcp": "./dist/index.js"
   },
   "scripts": {
     "dev": "nodemon",
@@ -14,8 +14,7 @@
     "preview": "vite --config ui/vite.preview.config.ts",
     "start": "node dist/index.js",
     "inspect": "tsx src/index.ts",
-    "typecheck": "tsc --noEmit",
-    "plugin:zip": "cd plugin && rm -f ../unsora-chatgpt-plugin.zip && zip -r ../unsora-chatgpt-plugin.zip . -x \".*\""
+    "typecheck": "tsc --noEmit"
   },
   "engines": {
     "node": ">=24"
