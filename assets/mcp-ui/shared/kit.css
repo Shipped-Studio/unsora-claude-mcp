@@ -40,7 +40,11 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; overflow: hidden; background: transparent; }
 body { font: 14px/1.4 var(--font); color: var(--text); }
-#root { padding: 2px; }
+#root {
+  padding:
+    calc(2px + var(--safe-top, 0px)) calc(2px + var(--safe-right, 0px))
+    calc(2px + var(--safe-bottom, 0px)) calc(2px + var(--safe-left, 0px));
+}
 
 .card {
   background: var(--card);
@@ -84,6 +88,13 @@ button.danger.primary { background: var(--danger); color: #fff; }
 button.sm { padding: 4px 10px; font-size: 12px; }
 button.link { border: none; background: none; padding: 0; color: var(--muted); font-weight: 500; text-decoration: underline; }
 .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* Touch devices: 44pt minimum tap targets (Claude MCP Apps guidelines). */
+@media (pointer: coarse) {
+  button:not(.link), select, input[type="text"], input[type="url"],
+  input[type="number"], input[type="datetime-local"] { min-height: 44px; }
+  label.check { min-height: 44px; }
+}
 
 .badge {
   display: inline-flex; align-items: center; gap: 5px;

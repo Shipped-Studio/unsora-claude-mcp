@@ -66,6 +66,11 @@ const Kit = (() => {
     if (ctx.theme) root.dataset.theme = ctx.theme;
     const vars = ctx.styles && ctx.styles.variables;
     if (vars) for (const [k, v] of Object.entries(vars)) if (v) root.style.setProperty(k, v);
+    // Keep interactive UI clear of the composer / mobile nav bar.
+    const insets = ctx.safeAreaInsets;
+    if (insets) for (const side of ["top", "right", "bottom", "left"]) {
+      root.style.setProperty(`--safe-${side}`, `${Number(insets[side]) || 0}px`);
+    }
   }
 
   // Report our height so the host sizes the frame exactly (no inner scroll).
@@ -83,7 +88,7 @@ const Kit = (() => {
     try {
       const res = await request("ui/initialize", {
         appInfo: { name, version: "1.0.0" },
-        appCapabilities: {},
+        appCapabilities: { availableDisplayModes: ["inline"] },
         protocolVersion: "2026-01-26",
       });
       hostCaps = (res && res.hostCapabilities) || {};
