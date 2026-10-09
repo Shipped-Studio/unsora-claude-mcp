@@ -3,7 +3,7 @@
   "private": true,
   "license": "AGPL-3.0-only",
   "version": "1.0.0",
-  "description": "Unsora Scheduler MCP server for Claude: clipping and social post scheduling (Streamable HTTP)",
+  "description": "ClipCast: Unsora clipping and social post scheduling MCP server for Claude (Streamable HTTP)",
   "type": "module",
   "bin": {
     "unsora-claude-mcp": "./dist/index.js"

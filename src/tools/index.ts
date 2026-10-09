@@ -964,7 +964,7 @@ ${GENERATION_GUIDE}
 ${CLIPPING_GUIDE}
 ${POSTING_RULES_GUIDE}`;
 
-export const schedulerWorkflowGuide = `# Unsora scheduler workflows (polling only — no webhooks)
+export const schedulerWorkflowGuide = `# ClipCast workflows (polling only — no webhooks)
 
 ${POSTING_GUIDE}
 ## Typical: long video → clips → scheduled posts

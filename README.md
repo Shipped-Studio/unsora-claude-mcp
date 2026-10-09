@@ -1,7 +1,8 @@
-# Unsora MCP Server — Claude build (Scheduler)
+# ClipCast — Unsora MCP server for Claude
 
-Standalone copy of `chatgpt-mcp` (itself a copy of `mono-repo/apps/mcp`) that
-serves only the **scheduler** tool set — the same tools as the monorepo's
+**ClipCast** is the Claude connector for Unsora: clip long videos into shorts
+and schedule or publish posts. It's a standalone copy of `chatgpt-mcp` (itself
+a copy of `mono-repo/apps/mcp`) that serves only the **scheduler** tool set — the same tools as the monorepo's
 `/scheduler` endpoint. Deploy it separately
 (e.g. `https://claude-mcp.tryunsora.com/mcp`).
 
@@ -14,7 +15,7 @@ Differences from the monorepo app:
   ChatGPT build.
 - Widgets use Claude's sandbox domain (`<sha256>.claudemcpcontent.com`,
   derived from `MCP_PUBLIC_URL` + `MCP_PATH`), as in the monorepo app.
-- `server.json` is the MCP registry manifest (`com.tryunsora/unsora-scheduler`).
+- `server.json` is the MCP registry manifest (`com.tryunsora/clipcast`).
 
 ```text
 Claude
@@ -76,7 +77,7 @@ CNAME claude-mcp → your-railway-domain
 | `MCP_PUBLIC_URL`        | required           | Public origin (OAuth metadata, icons, widget domain) |
 | `MCP_PATH`              | `/mcp`             | MCP endpoint path                            |
 | `MCP_ALLOWED_HOSTS`     | required           | Host header allowlist                        |
-| `MCP_SERVER_NAME`       | `unsora-scheduler` | MCP server name                              |
+| `MCP_SERVER_NAME`       | `clipcast`         | MCP server name                              |
 | `CLERK_PUBLISHABLE_KEY` | required           | Clerk OAuth                                  |
 | `CLERK_SECRET_KEY`      | required           | Clerk OAuth                                  |
 | `UNSORA_API_BASE_URL`   | required           | Backend API                                  |

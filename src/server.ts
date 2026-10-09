@@ -6,7 +6,7 @@ import { registerTools, schedulerWorkflowGuide } from "./tools/index.js";
 export type UnsoraAuthResolver = (authInfo?: AuthInfo) => UnsoraApi;
 
 export const SCHEDULER_INSTRUCTIONS = [
-  "Unsora Scheduler turns long videos into short clips (AI clipping) and schedules or publishes posts to the user's connected social accounts. Clipping spends credits from the connected Unsora account; posting needs a paid plan.",
+  "ClipCast by Unsora turns long videos, podcasts and streams into short clips (AI clipping), then posts or schedules those clips to the user's connected social accounts. Clipping spends credits from the connected Unsora account; posting needs a paid plan.",
   "create_clipping starts a job. In hosts that render the Unsora preview panel, the panel polls and shows the clips itself; otherwise follow with wait_for_clipping until the status is COMPLETED or FAILED.",
   "Files the user attaches in this chat don't reach Unsora: import them with upload_file (public URL, or base64 for small files) before clipping or posting them.",
   "See the unsora://workflows resource for multi-step workflows.",
@@ -50,8 +50,8 @@ export function createMcpServer(resolveUnsora: UnsoraAuthResolver): McpServer {
 
   const server = new McpServer(
     {
-      name: process.env.MCP_SERVER_NAME || "unsora-scheduler",
-      title: "Unsora Scheduler",
+      name: process.env.MCP_SERVER_NAME || "clipcast",
+      title: "ClipCast",
       version: "1.0.0",
       websiteUrl: "https://tryunsora.com",
       icons: [

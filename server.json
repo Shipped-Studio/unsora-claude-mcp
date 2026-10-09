@@ -11,9 +11,9 @@
       ]
     }
   ],
-  "name": "com.tryunsora/unsora-scheduler",
-  "title": "Unsora Scheduler",
-  "description": "Clip long videos into shorts and schedule or publish posts to your connected social accounts.",
+  "name": "com.tryunsora/clipcast",
+  "title": "ClipCast",
+  "description": "Turn long videos, podcasts and streams into short clips, then post or schedule them to your social accounts.",
   "remotes": [
     {
       "type": "streamable-http",
