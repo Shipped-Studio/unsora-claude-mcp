@@ -1242,7 +1242,8 @@ export function registerTools(
       description:
         "Poll a clipping job until COMPLETED or FAILED and return its clips with output URLs. " +
         "For hosts without the live preview panel (the panel tracks progress itself), or when " +
-        "the output URLs are needed.",
+        "the output URLs are needed." +
+        " Checks every 15 seconds until the job is COMPLETED or FAILED.",
       inputSchema: {
         clippingId: z.string(),
         maxAttempts: z.number().int().min(1).max(240).optional(),
@@ -1255,7 +1256,7 @@ export function registerTools(
           args.clippingId,
           {
             maxAttempts: args.maxAttempts,
-            intervalMs: (args.intervalSeconds ?? 5) * 1000,
+            intervalMs: (args.intervalSeconds ?? 15) * 1000,
           },
         ),
       ),
@@ -1455,7 +1456,8 @@ export function registerTools(
       title: "Wait for Image",
       description:
         "Poll an image job until COMPLETED or FAILED: create_image, create_influencer, " +
-        "create_thumbnail, upscale_image and create_movie_material.",
+        "create_thumbnail, upscale_image and create_movie_material." +
+        " Checks every 15 seconds until the job is COMPLETED or FAILED.",
       inputSchema: {
         generationId: z.string(),
         maxAttempts: z.number().int().min(1).max(120).optional(),
@@ -1468,7 +1470,7 @@ export function registerTools(
           args.generationId,
           {
             maxAttempts: args.maxAttempts,
-            intervalMs: (args.intervalSeconds ?? 5) * 1000,
+            intervalMs: (args.intervalSeconds ?? 15) * 1000,
           },
         ),
       ),
@@ -1615,7 +1617,9 @@ export function registerTools(
     {
       annotations: READ_ONLY,
       title: "Wait for Music",
-      description: "Poll music status until COMPLETED or FAILED",
+      description:
+        "Poll music status until COMPLETED or FAILED." +
+        " Checks every 15 seconds until the job is COMPLETED or FAILED.",
       inputSchema: {
         generationId: z.string(),
         maxAttempts: z.number().int().min(1).max(180).optional(),
@@ -1628,7 +1632,7 @@ export function registerTools(
           args.generationId,
           {
             maxAttempts: args.maxAttempts,
-            intervalMs: (args.intervalSeconds ?? 5) * 1000,
+            intervalMs: (args.intervalSeconds ?? 15) * 1000,
           },
         ),
       ),
@@ -1759,7 +1763,8 @@ export function registerTools(
       annotations: READ_ONLY,
       title: "Wait for Voiceover",
       description:
-        "Poll a voiceover or change_voice job until COMPLETED or FAILED.",
+        "Poll a voiceover or change_voice job until COMPLETED or FAILED." +
+        " Checks every 15 seconds until the job is COMPLETED or FAILED.",
       inputSchema: {
         generationId: z.string(),
         maxAttempts: z.number().int().min(1).max(180).optional(),
@@ -1772,7 +1777,7 @@ export function registerTools(
           args.generationId,
           {
             maxAttempts: args.maxAttempts,
-            intervalMs: (args.intervalSeconds ?? 5) * 1000,
+            intervalMs: (args.intervalSeconds ?? 15) * 1000,
           },
         ),
       ),
@@ -1936,7 +1941,8 @@ export function registerTools(
       title: "Wait for Video",
       description:
         "Poll a video job until COMPLETED or FAILED: create_video, create_motion_control, " +
-        "create_avatar_video and upscale_video.",
+        "create_avatar_video and upscale_video." +
+        " Checks every 15 seconds until the job is COMPLETED or FAILED.",
       inputSchema: {
         generationId: z.string(),
         maxAttempts: z.number().int().min(1).max(180).optional(),
@@ -1949,7 +1955,7 @@ export function registerTools(
           args.generationId,
           {
             maxAttempts: args.maxAttempts,
-            intervalMs: (args.intervalSeconds ?? 5) * 1000,
+            intervalMs: (args.intervalSeconds ?? 15) * 1000,
           },
         ),
       ),
@@ -2582,6 +2588,15 @@ export function registerTools(
       });
 
       const finished = await unsora.pollImageStatus(created.generation.id);
+      if (!finished.done) {
+        return jsonResult({
+          imageJob: finished,
+          generationId: created.generation.id,
+          note:
+            "The image is still generating, so no post was created yet. Call wait_for_image " +
+            "with generationId until it is COMPLETED, then create_post with its outputUrl.",
+        });
+      }
       const outputUrl = finished.data?.outputUrl;
       if (!outputUrl) {
         throw new Error(
