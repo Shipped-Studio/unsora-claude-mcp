@@ -371,14 +371,17 @@ const Kit = (() => {
   }
 
   /**
-   * Account avatar: the name's initial with its platform mark in the corner.
-   * Profile pictures live on the social networks' own CDNs, which widgets
-   * don't load (the directory only allows resources the server controls).
+   * Account avatar with its platform mark in the corner. Pictures are re-hosted
+   * in Unsora's storage; the name's initial shows when there's no picture or it
+   * can't load (e.g. an old URL on a social network's CDN, which the CSP blocks).
    */
   function avatar(account) {
     const name = account.name || account.username || "?";
-    const initial = el("div", { class: "fallback" }, name.replace(/^@/, "").slice(0, 1).toUpperCase());
-    return el("div", { class: "avatar" }, [initial, pfMark(account.provider)]);
+    const img = account.avatarUrl
+      ? el("img", { src: account.avatarUrl, alt: "", loading: "lazy", referrerpolicy: "no-referrer", onerror: (e) => e.target.replaceWith(fallback()) })
+      : fallback();
+    function fallback() { return el("div", { class: "fallback" }, name.replace(/^@/, "").slice(0, 1).toUpperCase()); }
+    return el("div", { class: "avatar" }, [img, pfMark(account.provider)]);
   }
 
   /** Normalize an account record from /accounts (or a post's target). */

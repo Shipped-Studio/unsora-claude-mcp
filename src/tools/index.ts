@@ -304,7 +304,10 @@ const LIBRARY_TYPES = Object.keys(LIBRARY) as [LibraryType, ...LibraryType[]];
 
 /** Hosts that may serve the generated media inside the sandboxed iframe. */
 const MEDIA_DOMAINS = (
-  process.env.MCP_MEDIA_DOMAINS || "https://*.blob.core.windows.net"
+  process.env.MCP_MEDIA_DOMAINS ||
+  "https://xpslpciobdvbfkzgebfw.supabase.co," +
+  "https://stsadekirfan532192938747.blob.core.windows.net," +
+  "https://files.tryunsora.com"
 )
   .split(",")
   .map((d) => d.trim())
@@ -1402,10 +1405,11 @@ export function registerTools(
       annotations: READ_ONLY,
       title: "Get Generation Price",
       description:
-        "Live credit price for one video, image or motion-control generation, quoted by " +
-        "the provider for these exact settings (resolution, duration, audio, attached " +
-        "media length). Free. Use before expensive video jobs, tell the user the cost, " +
-        "and pass the credits as maxCredits to the create tool.",
+        "Read-only price quote: returns the credit price of one video, image or " +
+        "motion-control generation for these exact settings (resolution, duration, audio, " +
+        "attached media length). It creates nothing, spends no credits and changes nothing " +
+        "in the user's account. The quoted credits can be passed as maxCredits to the " +
+        "create tool.",
       inputSchema: {
         category: z.enum(["video", "image", "motion-control"]),
         model: z.string().optional().describe("Model key from list_models"),
