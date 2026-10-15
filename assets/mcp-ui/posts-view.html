@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unsora Posts</title>
+<title>ClipCast Posts</title>
 <!--
-  Unsora posts (MCP Apps). Bound to the scheduler tools:
+  ClipCast posts (MCP Apps). Bound to the scheduler tools:
     list_posts                 -> list grouped by day, filter by status, load more
     get_post / update_post     -> one post in detail
     create_post, publish_post, retry_post, create_image_and_schedule
@@ -384,7 +384,7 @@
     if (st.confirm) {
       return el("div", { class: "confirm" }, [
         el("span", { class: "grow" }, post.status === "PUBLISHED" || post.status === "PARTIALLY_PUBLISHED"
-          ? "Delete this post from Unsora? It stays live on the platforms."
+          ? "Delete this post from ClipCast? It stays live on the platforms."
           : "Delete this post? This can't be undone."),
         button("Delete", () => remove(post), { danger: true, primary: true, sm: true, disabled: busy, key: "del:" + post.id }),
         button("Cancel", () => { st.confirm = false; Kit.refresh(); }, { sm: true, key: "cancel:" + post.id }),
@@ -422,9 +422,9 @@
     }
     if (post.status !== "PUBLISHING") {
       if (post.status === "DRAFT" || post.status === "SCHEDULED") {
-        out.push(button("Edit in Unsora", () => Kit.appLink("/scheduler/posts/" + encodeURIComponent(post.id) + "/edit"), { key: k("edit") }));
+        out.push(button("Edit in ClipCast", () => Kit.appLink("/scheduler/posts/" + encodeURIComponent(post.id) + "/edit"), { key: k("edit") }));
       } else {
-        out.push(button("Open in Unsora", () => Kit.appLink("/scheduler/posts/" + encodeURIComponent(post.id)), { key: k("open") }));
+        out.push(button("Open in ClipCast", () => Kit.appLink("/scheduler/posts/" + encodeURIComponent(post.id)), { key: k("open") }));
       }
       out.push(button("Delete", () => { st.confirm = true; Kit.refresh(); }, { danger: true, disabled: busy, key: k("delask") }));
     }
@@ -513,7 +513,7 @@
         el("div", { class: "h" }, list.total ? Kit.plural(list.total, "post") : "Posts"),
         el("div", { class: "row" }, [
           button("New post", async () => {
-            const ok = await Kit.sendPrompt("Open the Unsora post composer (compose_post) so I can create a new post.");
+            const ok = await Kit.sendPrompt("Open the ClipCast post composer (compose_post) so I can create a new post.");
             Kit.flash("new", ok ? "Sent" : "Couldn't send");
           }, { sm: true, key: "new" }),
           button("Calendar", () => Kit.appLink("/scheduler/calendar"), { sm: true }),
@@ -540,7 +540,7 @@
   function view() {
     switch (mode) {
       case "error": return Kit.errorCard(error || "Something went wrong.");
-      case "deleted": return el("div", { class: "card row" }, [el("span", { class: "badge" }, "Deleted"), el("span", { class: "muted" }, "The post was removed from Unsora.")]);
+      case "deleted": return el("div", { class: "card row" }, [el("span", { class: "badge" }, "Deleted"), el("span", { class: "muted" }, "The post was removed from ClipCast.")]);
       case "list": return listView();
       case "detail": return detail ? detailView(detail) : Kit.spinnerCard("Loading post…");
       default: return Kit.spinnerCard("Loading…");
@@ -548,7 +548,7 @@
   }
 
   Kit.mount(view);
-  Kit.init("unsora-posts");
+  Kit.init("clipcast-posts");
 })();
 </script>
 </body>

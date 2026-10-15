@@ -1,5 +1,5 @@
 /*
-  Shared runtime for the Unsora MCP widgets (MCP Apps, SEP-1865). Inlined into
+  Shared runtime for the ClipCast MCP widgets (MCP Apps, SEP-1865). Inlined into
   each widget at load time (see loadWidget in src/tools/index.ts).
 
   A small JSON-RPC bridge over postMessage covers the spec methods the widgets
@@ -137,7 +137,7 @@ const Kit = (() => {
   /** Web app base URL, filled in by the server when it serves the widget. */
   const APP_URL = "__UNSORA_APP_URL__";
 
-  /** Open a page of the Unsora web app, e.g. appLink("/billing"). */
+  /** Open a page of the ClipCast web app, e.g. appLink("/billing"). */
   function appLink(path) { return openLink(APP_URL + path); }
 
   async function openLink(url) {
@@ -158,8 +158,8 @@ const Kit = (() => {
   }
 
   function fileName(url) {
-    try { return decodeURIComponent(new URL(url).pathname.split("/").pop()) || "unsora-file"; }
-    catch (err) { return "unsora-file"; }
+    try { return decodeURIComponent(new URL(url).pathname.split("/").pop()) || "clipcast-file"; }
+    catch (err) { return "clipcast-file"; }
   }
 
   async function copyText(text) {

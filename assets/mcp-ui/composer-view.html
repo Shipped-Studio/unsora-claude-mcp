@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unsora Post Composer</title>
+<title>ClipCast Post Composer</title>
 <!--
-  Unsora post composer (MCP Apps). Bound to compose_post, whose result carries
+  ClipCast post composer (MCP Apps). Bound to compose_post, whose result carries
   { prefill, accounts, subscription }. The user picks accounts, media, caption,
   per-platform options and timing; we validate against each platform's rules
   and call create_post ourselves, then follow publishing with get_post.
@@ -114,11 +114,7 @@
     FOLLOWER_OF_CREATOR: "Followers",
     SELF_ONLY: "Only me",
   };
-  const LIBRARY_SOURCES = [
-    ["upload", "Uploads"], ["image", "Images"], ["video", "Videos"], ["thumbnail", "Thumbnails"],
-    ["influencer", "Influencers"], ["image_upscale", "Image upscales"], ["video_upscale", "Video upscales"],
-    ["motion_control", "Motion control"], ["avatar", "Avatars"], ["clipping", "Clips"],
-  ];
+  const LIBRARY_SOURCES = [["upload", "Uploads"], ["clipping", "Clips"]];
   const POLL_MS = 8000;
 
   /* ------------------------------- state ------------------------------ */
@@ -220,7 +216,7 @@
     const warnings = [];
     const plats = platformsChosen();
     if (!selected.size) errors.push("Choose at least one account.");
-    if (!paid) errors.push("Posting needs a paid Unsora plan.");
+    if (!paid) errors.push("Posting needs a paid ClipCast plan.");
 
     for (const p of plats) {
       const r = RULES[p];
@@ -239,7 +235,7 @@
       if (images.length > 35) errors.push("A post can have up to 35 images.");
       if (plats.includes("instagram")) {
         const bad = images.filter((u) => { const d = dims[u]; return d && d.w && (d.w / d.h < 0.8 - 0.01 || d.w / d.h > 1.91 + 0.01); });
-        // Unsora pads these at publish time, so it's a note, not a blocker.
+        // ClipCast pads these at publish time, so it's a note, not a blocker.
         if (bad.length) warnings.push("Instagram needs 4:5 to 1.91:1. " + Kit.plural(bad.length, "image") + " will be padded to fit (marked).");
       }
     }
@@ -372,14 +368,8 @@
     let rows = [];
     if (source === "upload") {
       rows = arr(obj(s.data).uploads).map((r) => ({ url: str(r.url), thumb: null, kind: kindOf(r.mimeType || r.type, "file") }));
-    } else if (source === "clipping") {
-      rows = arr(s.data).flatMap((j) => arr(obj(j).clips).map((c) => ({ url: u(c.outputAsset), thumb: u(c.thumbnailAsset), kind: "video" })));
     } else {
-      const video = ["video", "video_upscale", "motion_control", "avatar"].includes(source);
-      const raw = s.generations || s.jobs || s.videos || (Array.isArray(s.data) ? s.data : []);
-      rows = arr(raw)
-        .filter((r) => !r.status || /completed/i.test(r.status))
-        .map((r) => ({ url: u(r.outputAsset) || u(r.processedAsset) || str(r.image), thumb: u(r.thumbnailAsset), kind: video ? "video" : "image" }));
+      rows = arr(s.data).flatMap((j) => arr(obj(j).clips).map((c) => ({ url: u(c.outputAsset), thumb: u(c.thumbnailAsset), kind: "video" })));
     }
     return rows.filter((r) => r.url && (r.kind === "image" || r.kind === "video"));
   }
@@ -651,7 +641,7 @@
           return el("div", { class: "m-tile" }, [
             mediaNode(u, "image"),
             el("span", { class: "idx" }, String(i + 1)),
-            bad ? el("span", { class: "warn", title: "Outside Instagram's 4:5 to 1.91:1. Unsora pads it to fit." }, "Padded") : null,
+            bad ? el("span", { class: "warn", title: "Outside Instagram's 4:5 to 1.91:1. ClipCast pads it to fit." }, "Padded") : null,
             d.error ? el("span", { class: "warn" }, "Can't load") : null,
             el("div", { class: "ctl" }, [
               i > 0 ? el("button", { type: "button", title: "Move earlier", "aria-label": "Move earlier", onclick: () => moveImage(i, -1) }, "←") : null,
@@ -678,7 +668,7 @@
         button("Add", () => addMedia(newUrl, format === "video" ? "video" : "image"), { sm: true }),
         button(showPicker ? "Hide library" : "From library", () => {
           showPicker = !showPicker;
-          if (showPicker && !picker.items) loadPicker(format === "video" ? "video" : picker.source);
+          if (showPicker && !picker.items) loadPicker(format === "video" ? "clipping" : picker.source);
           Kit.refresh();
         }, { sm: true }),
       ]));
@@ -869,7 +859,7 @@
             bound("input", { get s() { return scheduleAt; }, set s(v) { scheduleAt = v; } }, "s", { type: "datetime-local", id: "when", style: { width: "auto" }, "aria-label": "Publish at" }),
             el("span", { class: "muted small" }, tz),
           ])
-        : el("div", { class: "muted small" }, when === "now" ? "Publishes as soon as you post." : "Saved in Unsora; publish or schedule it later."),
+        : el("div", { class: "muted small" }, when === "now" ? "Publishes as soon as you post." : "Saved in ClipCast; publish or schedule it later."),
     ]);
   }
 
@@ -950,7 +940,7 @@
         : el("div", { class: "row" }, [el("span", { class: "spinner" }), el("span", { class: "muted" }, "Loading the post…")]),
       el("div", { class: "actions" }, [
         button("Create another", reset, { primary: true }),
-        result.id ? button("Open in Unsora", () => Kit.appLink("/scheduler/posts/" + encodeURIComponent(result.id))) : null,
+        result.id ? button("Open in ClipCast", () => Kit.appLink("/scheduler/posts/" + encodeURIComponent(result.id))) : null,
         status === "FAILED" || status === "PARTIALLY_PUBLISHED"
           ? button("Retry failed", async () => {
               try {
@@ -973,7 +963,7 @@
   }
 
   Kit.mount(view);
-  Kit.init("unsora-composer");
+  Kit.init("clipcast-composer");
 })();
 </script>
 </body>

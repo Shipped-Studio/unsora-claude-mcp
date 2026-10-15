@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unsora Connected Accounts</title>
+<title>ClipCast Connected Accounts</title>
 <!--
-  Unsora connected accounts (MCP Apps). Bound to get_accounts: shows each
+  ClipCast connected accounts (MCP Apps). Bound to get_accounts: shows each
   account with its platform; selecting some and pressing "Create post" asks
   the model to open the composer for them.
 -->
@@ -107,7 +107,7 @@
     if (!accounts.length) {
       return el("div", { class: "card stack" }, [
         el("div", { class: "title" }, "No social accounts connected yet"),
-        el("div", { class: "muted" }, "Connect YouTube, TikTok, Instagram, Facebook, LinkedIn, Pinterest, Threads, Bluesky, X or Google Business Profile in Unsora to start posting."),
+        el("div", { class: "muted" }, "Connect YouTube, TikTok, Instagram, Facebook, LinkedIn, Pinterest, Threads, Bluesky, X or Google Business Profile in ClipCast to start posting."),
         el("div", { class: "actions" }, button("Connect accounts", () => Kit.appLink("/scheduler/accounts"), { primary: true })),
       ]);
     }
@@ -126,7 +126,7 @@
   }
 
   Kit.mount(view);
-  Kit.init("unsora-accounts").then(() => setTimeout(() => { if (!accounts && !error) reload(); }, 1500));
+  Kit.init("clipcast-accounts").then(() => setTimeout(() => { if (!accounts && !error) reload(); }, 1500));
 })();
 </script>
 </body>

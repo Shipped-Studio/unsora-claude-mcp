@@ -103,8 +103,8 @@ CNAME clipcast → your-railway-domain
 | `get_post_analytics`        | Views / likes / comments / shares of published posts |
 | `upload_file`               | Import a URL / base64 file into the library          |
 | `list_uploads`              | List uploaded files                                  |
-| `list_generations`          | Browse past results to post                          |
-| `delete_generation`         | Delete a result or uploaded file                     |
+| `list_generations`          | Browse past clipping jobs to post                    |
+| `delete_generation`         | Delete a clipping job or uploaded file               |
 
 App-only (widget polling / pickers): `clipping_status`, `pinterest_boards`,
 `tiktok_creator_info`.
@@ -116,7 +116,7 @@ renders.
 ## Preview widgets (MCP Apps)
 
 Plain HTML/JS in `assets/mcp-ui/`, served as-is. This build exposes
-`ui://unsora/` `account`, `accounts`, `posts`, `analytics`, `library`,
+`ui://clipcast/` `account`, `accounts`, `posts`, `analytics`, `library`,
 `composer` and `clipping`. `npm run preview` opens a mock host that exercises
 the widgets without the server.
 

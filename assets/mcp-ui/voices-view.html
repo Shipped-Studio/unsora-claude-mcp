@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Unsora Voices</title>
+<title>ClipCast Voices</title>
 <!--
-  Unsora voice picker (MCP Apps, `text/html;profile=mcp-app`).
+  ClipCast voice picker (MCP Apps, `text/html;profile=mcp-app`).
 
   Flow: the host sends list_voiceover_voices' result -> we show every voice as
   a chip; tapping one plays its preview clip and shows its details; "Use"
@@ -485,7 +485,7 @@
 
   render();
   request("ui/initialize", {
-    appInfo: { name: "unsora-voice-picker", version: "2.0.0" },
+    appInfo: { name: "clipcast-voice-picker", version: "2.0.0" },
     appCapabilities: {},
     protocolVersion: "2026-01-26",
   }).then((res) => {

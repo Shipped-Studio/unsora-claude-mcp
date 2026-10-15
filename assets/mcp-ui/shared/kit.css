@@ -1,5 +1,5 @@
 /*
-  Shared base styles for the Unsora MCP widgets. Inlined into each widget at
+  Shared base styles for the ClipCast MCP widgets. Inlined into each widget at
   load time (see loadWidget in src/tools/index.ts); host theme tokens override
   the fallbacks below.
 */
