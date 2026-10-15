@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "clipcast": {
+      "type": "http",
+      "url": "https://clipcast.tryunsora.com/mcp"
+    }
+  }
+}

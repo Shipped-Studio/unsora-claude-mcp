@@ -1,0 +1,10 @@
+{
+  "name": "clipcast",
+  "displayName": "ClipCast",
+  "version": "1.0.0",
+  "description": "Turn long videos, podcasts and streams into short clips, then post or schedule them to your social accounts.",
+  "author": { "name": "Unsora", "url": "https://tryunsora.com" },
+  "homepage": "https://tryunsora.com",
+  "license": "AGPL-3.0-only",
+  "keywords": ["clipping", "short-form video", "social media", "scheduler"]
+}
