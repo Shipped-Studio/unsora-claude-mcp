@@ -36,13 +36,32 @@ videos you own or have permission to use.
 
 ## How it connects
 
-This plugin adds one remote MCP server, `https://clipcast.tryunsora.com/mcp`.
+This plugin adds one remote MCP server, `https://claude-mcp.tryunsora.com/mcp`.
 It runs no code on your computer. The first time Claude uses it, you sign in to
 your Unsora account with OAuth.
 
 To clip a file from your computer, ask Claude to open your Unsora library and
 use its **Upload** button. The file goes straight to Unsora's storage through a
 one-time upload link; Claude doesn't read the file.
+
+## Troubleshooting
+
+- **Sign-in doesn't finish:** remove the Unsora connector in Claude's
+  connector settings, add it again, and complete the Unsora sign-in in the
+  window that opens.
+- **"Not supported" video link:** clipping takes YouTube links and direct
+  video file URLs. For TikTok, Instagram or Vimeo videos, download the file
+  and upload it with the library's **Upload** button.
+- **Clips are still processing:** long videos take several minutes. The clips
+  panel updates by itself; you can also ask Claude to check the job again.
+- **Not enough credits, or posting is blocked:** ask Claude to check your plan
+  and credits. Clipping needs credits and posting needs a paid plan.
+- **Post rejected:** each platform has limits on video length, file size,
+  image count and caption length. The error lists the rule for each platform.
+- **Post failed or partly published:** ask Claude to retry it. Only the
+  accounts that failed are retried.
+
+For anything else, contact support at https://tryunsora.com/contact.
 
 ## Data it sends
 
@@ -51,7 +70,7 @@ Claude are sent to Unsora to create clips and posts. Posts are published only
 to the social accounts you choose, and only when you ask. Unsora doesn't
 receive your conversation history.
 
-- Documentation: https://tryunsora.com/connector
+- Documentation: https://github.com/Shipped-Studio/unsora-claude-mcp/tree/main/plugin
 - Privacy policy: https://tryunsora.com/privacy
 - Terms of service: https://tryunsora.com/terms
 - Support: https://tryunsora.com/contact

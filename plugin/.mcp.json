@@ -2,7 +2,7 @@
   "mcpServers": {
     "unsora": {
       "type": "http",
-      "url": "https://clipcast.tryunsora.com/mcp"
+      "url": "https://claude-mcp.tryunsora.com/mcp"
     }
   }
 }

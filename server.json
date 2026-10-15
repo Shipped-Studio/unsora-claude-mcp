@@ -4,7 +4,7 @@
   "websiteUrl": "https://tryunsora.com/docs",
   "icons": [
     {
-      "src": "https://clipcast.tryunsora.com/assets/brand/icon-light.png",
+      "src": "https://claude-mcp.tryunsora.com/assets/brand/icon-light.png",
       "mimeType": "image/png",
       "sizes": [
         "524x524"
@@ -17,7 +17,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://clipcast.tryunsora.com/mcp",
+      "url": "https://claude-mcp.tryunsora.com/mcp",
       "headers": [
         {
           "name": "Authorization",

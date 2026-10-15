@@ -4,7 +4,7 @@ The Claude connector for Unsora: clip long videos into shorts
 and schedule or publish posts. It's a standalone copy of `chatgpt-mcp` (itself
 a copy of `mono-repo/apps/mcp`) that serves only the **scheduler** tool set — the same tools as the monorepo's
 `/scheduler` endpoint. Deploy it separately
-(e.g. `https://clipcast.tryunsora.com/mcp`).
+(e.g. `https://claude-mcp.tryunsora.com/mcp`).
 
 Differences from the monorepo app:
 
@@ -20,7 +20,7 @@ Differences from the monorepo app:
 ```text
 Claude
    ↓
-https://clipcast.tryunsora.com/mcp
+https://claude-mcp.tryunsora.com/mcp
    ↓
 This server (Clerk OAuth or Bearer USER_API_KEY)
    ↓
@@ -65,7 +65,7 @@ npx @modelcontextprotocol/inspector \
 health-checks `/health`. Set the variables below, then point DNS at it:
 
 ```text
-CNAME clipcast → your-railway-domain
+CNAME claude-mcp → your-railway-domain
 ```
 
 ## Environment
