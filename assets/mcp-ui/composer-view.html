@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ClipCast Post Composer</title>
+<title>Unsora Post Composer</title>
 <!--
-  ClipCast post composer (MCP Apps). Bound to compose_post, whose result carries
+  Unsora post composer (MCP Apps). Bound to compose_post, whose result carries
   { prefill, accounts, subscription }. The user picks accounts, media, caption,
   per-platform options and timing; we validate against each platform's rules
   and call create_post ourselves, then follow publishing with get_post.
@@ -216,7 +216,7 @@
     const warnings = [];
     const plats = platformsChosen();
     if (!selected.size) errors.push("Choose at least one account.");
-    if (!paid) errors.push("Posting needs a paid ClipCast plan.");
+    if (!paid) errors.push("Posting needs a paid Unsora plan.");
 
     for (const p of plats) {
       const r = RULES[p];
@@ -235,7 +235,7 @@
       if (images.length > 35) errors.push("A post can have up to 35 images.");
       if (plats.includes("instagram")) {
         const bad = images.filter((u) => { const d = dims[u]; return d && d.w && (d.w / d.h < 0.8 - 0.01 || d.w / d.h > 1.91 + 0.01); });
-        // ClipCast pads these at publish time, so it's a note, not a blocker.
+        // Unsora pads these at publish time, so it's a note, not a blocker.
         if (bad.length) warnings.push("Instagram needs 4:5 to 1.91:1. " + Kit.plural(bad.length, "image") + " will be padded to fit (marked).");
       }
     }
@@ -347,7 +347,7 @@
     try {
       const sc = source === "upload"
         ? await Kit.callTool("list_uploads", { limit: 48 })
-        : await Kit.callTool("list_generations", { type: source, limit: 48 });
+        : await Kit.callTool("list_clips", { type: source, limit: 48 });
       picker.items = pickerItems(source, sc);
     } catch (err) {
       picker.error = err.message;
@@ -641,7 +641,7 @@
           return el("div", { class: "m-tile" }, [
             mediaNode(u, "image"),
             el("span", { class: "idx" }, String(i + 1)),
-            bad ? el("span", { class: "warn", title: "Outside Instagram's 4:5 to 1.91:1. ClipCast pads it to fit." }, "Padded") : null,
+            bad ? el("span", { class: "warn", title: "Outside Instagram's 4:5 to 1.91:1. Unsora pads it to fit." }, "Padded") : null,
             d.error ? el("span", { class: "warn" }, "Can't load") : null,
             el("div", { class: "ctl" }, [
               i > 0 ? el("button", { type: "button", title: "Move earlier", "aria-label": "Move earlier", onclick: () => moveImage(i, -1) }, "←") : null,
@@ -859,7 +859,7 @@
             bound("input", { get s() { return scheduleAt; }, set s(v) { scheduleAt = v; } }, "s", { type: "datetime-local", id: "when", style: { width: "auto" }, "aria-label": "Publish at" }),
             el("span", { class: "muted small" }, tz),
           ])
-        : el("div", { class: "muted small" }, when === "now" ? "Publishes as soon as you post." : "Saved in ClipCast; publish or schedule it later."),
+        : el("div", { class: "muted small" }, when === "now" ? "Publishes as soon as you post." : "Saved in Unsora; publish or schedule it later."),
     ]);
   }
 
@@ -940,7 +940,7 @@
         : el("div", { class: "row" }, [el("span", { class: "spinner" }), el("span", { class: "muted" }, "Loading the post…")]),
       el("div", { class: "actions" }, [
         button("Create another", reset, { primary: true }),
-        result.id ? button("Open in ClipCast", () => Kit.appLink("/scheduler/posts/" + encodeURIComponent(result.id))) : null,
+        result.id ? button("Open in Unsora", () => Kit.appLink("/scheduler/posts/" + encodeURIComponent(result.id))) : null,
         status === "FAILED" || status === "PARTIALLY_PUBLISHED"
           ? button("Retry failed", async () => {
               try {
@@ -963,7 +963,7 @@
   }
 
   Kit.mount(view);
-  Kit.init("clipcast-composer");
+  Kit.init("unsora-composer");
 })();
 </script>
 </body>

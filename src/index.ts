@@ -69,7 +69,7 @@ app.use(
 app.get("/health", (_req, res) => {
   res.json({
     ok: true,
-    service: process.env.MCP_SERVER_NAME || "clipcast",
+    service: process.env.MCP_SERVER_NAME || "unsora-mcp",
     mcp: MCP_PATH,
     publicUrl: MCP_RESOURCE_URL,
     auth: ["api_key", "clerk_oauth"],
@@ -270,7 +270,7 @@ app.all(MCP_PATH, async (req: Request, res: Response, next: NextFunction) => {
 });
 
 app.listen(PORT, HOST, () => {
-  console.log(`ClipCast MCP listening on http://${HOST}:${PORT}`);
+  console.log(`Unsora MCP listening on http://${HOST}:${PORT}`);
   console.log(`Health: ${MCP_PUBLIC_URL}/health`);
   console.log(`MCP:    ${MCP_RESOURCE_URL}`);
   console.log(

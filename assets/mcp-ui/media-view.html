@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ClipCast Preview</title>
+<title>Unsora Preview</title>
 <!--
-  ClipCast media preview (MCP Apps, `text/html;profile=mcp-app`).
+  Unsora media preview (MCP Apps, `text/html;profile=mcp-app`).
   One file for image, video and audio: the server fills in KIND below.
 
   Flow: the host sends the create tool's result -> we read generationIds ->
@@ -273,7 +273,7 @@
     }
     if (!isDone(item.status)) {
       if (Date.now() - startedAt > GIVE_UP_MS) {
-        Object.assign(item, { status: "failed", error: "Still running. Check your ClipCast library later." });
+        Object.assign(item, { status: "failed", error: "Still running. Check your Unsora library later." });
       } else {
         schedule(item, run, nextMs);
       }
@@ -300,8 +300,8 @@
   }
 
   function fileName(url) {
-    try { return decodeURIComponent(new URL(url).pathname.split("/").pop()) || "clipcast-" + NOUN; }
-    catch (err) { return "clipcast-" + NOUN; }
+    try { return decodeURIComponent(new URL(url).pathname.split("/").pop()) || "unsora-" + NOUN; }
+    catch (err) { return "unsora-" + NOUN; }
   }
 
   async function copy(url, key) {
@@ -335,7 +335,7 @@
 
   function publish(url, key) {
     sendPrompt(
-      "Publish this " + NOUN + " as a social post with ClipCast (media URL: " + url + "). " +
+      "Publish this " + NOUN + " as a social post with Unsora (media URL: " + url + "). " +
         "Show my connected accounts first, then ask me for the caption and posting time before calling create_post.",
       key,
     );
@@ -479,7 +479,7 @@
 
   render();
   request("ui/initialize", {
-    appInfo: { name: "clipcast-" + KIND + "-preview", version: "2.0.0" },
+    appInfo: { name: "unsora-" + KIND + "-preview", version: "2.0.0" },
     appCapabilities: {},
     protocolVersion: "2026-01-26",
   }).then((res) => {

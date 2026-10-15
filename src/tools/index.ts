@@ -17,17 +17,17 @@ import { type UnsoraApi, UnsoraApiError } from "../unsora-api.js";
 import type { UnsoraAuthResolver } from "../server.js";
 import { jsonResult } from "../util.js";
 
-const IMAGE_UI_URI = "ui://clipcast/image";
-const VIDEO_UI_URI = "ui://clipcast/video";
-const AUDIO_UI_URI = "ui://clipcast/audio";
-const CLIPPING_UI_URI = "ui://clipcast/clipping";
-const VOICES_UI_URI = "ui://clipcast/voices";
-const ACCOUNT_UI_URI = "ui://clipcast/account";
-const ACCOUNTS_UI_URI = "ui://clipcast/accounts";
-const POSTS_UI_URI = "ui://clipcast/posts";
-const ANALYTICS_UI_URI = "ui://clipcast/analytics";
-const LIBRARY_UI_URI = "ui://clipcast/library";
-const COMPOSER_UI_URI = "ui://clipcast/composer";
+const IMAGE_UI_URI = "ui://unsora/image";
+const VIDEO_UI_URI = "ui://unsora/video";
+const AUDIO_UI_URI = "ui://unsora/audio";
+const CLIPPING_UI_URI = "ui://unsora/clipping";
+const VOICES_UI_URI = "ui://unsora/voices";
+const ACCOUNT_UI_URI = "ui://unsora/account";
+const ACCOUNTS_UI_URI = "ui://unsora/accounts";
+const POSTS_UI_URI = "ui://unsora/posts";
+const ANALYTICS_UI_URI = "ui://unsora/analytics";
+const LIBRARY_UI_URI = "ui://unsora/library";
+const COMPOSER_UI_URI = "ui://unsora/composer";
 
 /**
  * Widgets built on the shared kit (assets/mcp-ui/shared). Each reads the
@@ -35,19 +35,18 @@ const COMPOSER_UI_URI = "ui://clipcast/composer";
  * and calls tools itself for follow-up actions.
  */
 const KIT_WIDGETS = [
-  { uri: ACCOUNT_UI_URI, file: "account-view.html", name: "ClipCast Plan & Credits", description: "Plan, subscription and credit balance" },
-  { uri: ACCOUNTS_UI_URI, file: "accounts-view.html", name: "ClipCast Connected Accounts", description: "Connected social accounts" },
-  { uri: POSTS_UI_URI, file: "posts-view.html", name: "ClipCast Posts", description: "Scheduled, draft and published posts with live publish status" },
-  { uri: ANALYTICS_UI_URI, file: "analytics-view.html", name: "ClipCast Analytics", description: "Post performance across platforms" },
-  { uri: LIBRARY_UI_URI, file: "library-view.html", name: "ClipCast Library", description: "Past clips and uploads" },
-  { uri: COMPOSER_UI_URI, file: "composer-view.html", name: "ClipCast Post Composer", description: "Compose, configure per platform and schedule a post" },
+  { uri: ACCOUNT_UI_URI, file: "account-view.html", name: "Unsora Plan & Credits", description: "Plan, subscription and credit balance" },
+  { uri: ACCOUNTS_UI_URI, file: "accounts-view.html", name: "Unsora Connected Accounts", description: "Connected social accounts" },
+  { uri: POSTS_UI_URI, file: "posts-view.html", name: "Unsora Posts", description: "Scheduled, draft and published posts with live publish status" },
+  { uri: ANALYTICS_UI_URI, file: "analytics-view.html", name: "Unsora Analytics", description: "Post performance across platforms" },
+  { uri: LIBRARY_UI_URI, file: "library-view.html", name: "Unsora Library", description: "Past clips and uploads" },
+  { uri: COMPOSER_UI_URI, file: "composer-view.html", name: "Unsora Post Composer", description: "Compose, configure per platform and schedule a post" },
 ] as const;
 
 /** Appended to descriptions of tools whose result renders a widget. */
 const SHOWN_IN_UI =
-  " In app-capable hosts the result renders as an interactive panel the user can see and act " +
-  "on — do NOT repeat its contents as a list or table in your reply; add only what the panel " +
-  "doesn't say.";
+  " In app-capable hosts the result also renders as an interactive panel that shows these " +
+  "details to the user.";
 
 /*
  * Media preview contract (assets/mcp-ui/media-view.html reads this):
@@ -67,17 +66,17 @@ const PREVIEWS: Record<
 > = {
   image: {
     uri: IMAGE_UI_URI,
-    name: "ClipCast Image Preview",
+    name: "Unsora Image Preview",
     statusTool: "image_status",
   },
   video: {
     uri: VIDEO_UI_URI,
-    name: "ClipCast Video Preview",
+    name: "Unsora Video Preview",
     statusTool: "video_status",
   },
   audio: {
     uri: AUDIO_UI_URI,
-    name: "ClipCast Audio Preview",
+    name: "Unsora Audio Preview",
     statusTool: "audio_status",
   },
 };
@@ -125,21 +124,21 @@ const READ_ONLY = {
   openWorldHint: false,
 } as const;
 
-/** Creates something new in the user's ClipCast account (spends credits). */
+/** Creates something new in the user's Unsora account (spends credits). */
 const CREATES = {
   readOnlyHint: false,
   destructiveHint: false,
   openWorldHint: false,
 } as const;
 
-/** Creates, and reaches outside ClipCast: fetches a public URL or posts publicly. */
+/** Creates, and reaches outside Unsora: fetches a public URL or posts publicly. */
 const CREATES_EXTERNAL = {
   readOnlyHint: false,
   destructiveHint: false,
   openWorldHint: true,
 } as const;
 
-/** Deletes or overwrites the user's data inside ClipCast. */
+/** Deletes or overwrites the user's data inside Unsora. */
 const DESTRUCTIVE = {
   readOnlyHint: false,
   destructiveHint: true,
@@ -293,7 +292,7 @@ const MOVIE_MATERIAL_MODES = Object.keys(MOVIE_MATERIAL_PARAMS) as [
 
 /**
  * The user's library per result type: list endpoint + item path prefix (for
- * delete). ClipCast only keeps clipping jobs; uploads use list_uploads.
+ * delete). Unsora only keeps clipping jobs; uploads use list_uploads.
  */
 const LIBRARY = {
   clipping: { list: "/clippings/all", item: "/clippings" },
@@ -322,20 +321,6 @@ function claudeAppDomain(): string | undefined {
     .slice(0, 32);
   return `${hash}.claudemcpcontent.com`;
 }
-
-/** Where connected accounts' profile pictures are served from. */
-const AVATAR_DOMAINS = [
-  "https://*.fbcdn.net",
-  "https://*.cdninstagram.com",
-  "https://*.tiktokcdn.com",
-  "https://*.tiktokcdn-us.com",
-  "https://*.googleusercontent.com",
-  "https://*.ggpht.com",
-  "https://*.ytimg.com",
-  "https://*.pinimg.com",
-  "https://*.licdn.com",
-  "https://cdn.bsky.app",
-];
 
 function resourceUiMeta(
   extraDomains: readonly string[] = [],
@@ -504,10 +489,10 @@ async function checkClippingStatus(unsora: UnsoraApi, id: string) {
 /** Told to the model on a create result, where a preview may be showing. */
 function previewNote(wait: string): string {
   return (
-    "Generation queued. If this host rendered the ClipCast preview panel, it polls progress " +
-    `and shows the result itself: do NOT call ${wait}, summarize the settings used and ` +
-    `end your turn. In hosts without the preview, call ${wait} with the generation id — ` +
-    "also when a next step needs the output URL (posting it, or passing it to another tool)."
+    "Job queued. In hosts that show the Unsora preview panel, the panel tracks progress " +
+    `and shows the result when it's ready, so ${wait} isn't needed there. ${wait} returns ` +
+    "the output URLs once the job finishes, for hosts without the panel or when a next step " +
+    "needs them (for example posting a clip)."
   );
 }
 
@@ -791,13 +776,13 @@ function catalogCreateSchema(category: CatalogCategory, promptRequired: boolean)
 }
 
 /*
- * clipcast://workflows is assembled from sections so the scheduler endpoint can
+ * unsora://workflows is assembled from sections so the scheduler endpoint can
  * serve the posting + clipping parts without the generation ones.
  */
 const POSTING_GUIDE = `## Supported social platforms
 Posts can target any connected account on: YouTube, TikTok, Instagram,
 Facebook, LinkedIn, Pinterest, Threads, Bluesky, X and Google Business Profile.
-Connect accounts in the ClipCast app; get_accounts returns them with a "provider"
+Connect accounts in the Unsora app; get_accounts returns them with a "provider"
 field. One Google login connects every Business Profile location as its own
 account (provider "google_business").
 - YouTube: video only; title via title / accountOverrides.
@@ -811,21 +796,19 @@ account (provider "google_business").
 
 ## Composing posts in app-capable hosts
 compose_post opens an editable composer (accounts, caption, media, per-platform
-options, schedule) that creates the post itself. Prefill what the user gave,
-then let them finish there — don't also call create_post. Outside such hosts,
-use create_post directly.
+options, schedule) that creates the post itself, prefilled with what the user
+gave, so create_post isn't needed afterwards. Outside such hosts, create_post
+creates the post directly.
 
 ## Uploading media
-upload_file imports a public URL (or small base64 payload) into the user's
-library and returns a hosted url — use it when the user supplies their own
-media for posts or clipping. Available to every
-authenticated user.
+Files from the user's device: in hosts that show apps, call list_uploads and
+have the user pick the file with the panel's Upload button — it goes straight
+to storage, so size isn't limited by the chat. Agents that can send HTTP
+requests: create_upload_url → PUT the bytes to uploadUrl → complete_upload
+with blobName.
 
-Large files (long videos, podcasts) from the user's device: in hosts that
-show apps, call list_uploads and have the user pick the file with the panel's
-Upload button — it goes straight to storage, so size isn't limited by the
-chat. Agents that can send HTTP requests: create_upload_url → PUT the bytes
-to uploadUrl → complete_upload with blobName.
+Files already online: upload_file imports a public URL into the user's
+library and returns a hosted url for posts or clipping.
 `;
 
 const GENERATION_GUIDE = `## Typical: generate image → schedule social post
@@ -897,11 +880,11 @@ location, first frame, style collage, 2x4 or 1x4 storyboard → wait_for_image.
 `;
 
 const CLIPPING_GUIDE = `## Clipping (long video → many short clips)
-create_clipping (public videoUrl). In hosts that render the live preview
-panel (e.g. Claude.ai), STOP after creating — the preview polls progress and
-shows the clips itself; do not call wait_for_clipping or
-clipping_status. Only poll with wait_for_clipping in hosts
-without the preview, or when the user explicitly asks for the output URLs.
+create_clipping takes a YouTube link or direct video file URL of a video the
+user owns or has rights to clip. In hosts that render the live preview panel
+(e.g. Claude.ai), the panel tracks progress and shows the clips, so polling
+isn't needed there. wait_for_clipping returns the clips for hosts without the
+panel, or when the output URLs are needed.
 `;
 
 const POSTING_RULES_GUIDE = `## Posts need paid plan (isActive on subscription).
@@ -917,11 +900,11 @@ over 7–90 days. Pass refresh: true to pull fresh numbers from the platforms.
 X also reports saves (bookmarks); Google Business Profile reports views only.
 
 ## Library
-list_generations (type clipping) browses past clipping jobs and their clips.
-delete_generation removes one permanently; confirm with the user first.
+list_clips browses past clipping jobs and their clips. delete_library_item
+permanently removes a clipping job or an uploaded file.
 
-## Platform media rules (ClipCast adjusts images automatically)
-At publish time ClipCast fits images to each platform: converts formats
+## Platform media rules (Unsora adjusts images automatically)
+At publish time Unsora fits images to each platform: converts formats
 (Instagram is JPEG-only), pads images outside the allowed ratio over a blurred
 copy (nothing is cropped), makes carousels consistent (Instagram: every image
 at the first one's shape; Pinterest: same pixel size), and shrinks oversized
@@ -929,23 +912,24 @@ files. So any ratio is safe to post, but for the best look:
 - Instagram feed/carousel: 4:5 (1080x1350) or 1:1. 9:16 images get side bars.
 - Reels, TikTok, Shorts: 9:16 video, 1080x1920.
 - Instagram AND TikTok together: 4:5 images suit both.
-What ClipCast can't fix, and rejects before scheduling: videos too long/short or
+What Unsora can't fix, and rejects before scheduling: videos too long/short or
 too large for a platform, too many images, captions over the limit.
 
 ## Failed posts
 If a post is FAILED or PARTIALLY_PUBLISHED (one platform succeeded, another
 failed), call retry_post with the post id — it re-attempts only the failed
-accounts and never double-posts. Do NOT create a duplicate post to retry.
+accounts and never double-posts, while a new post would publish again to the
+accounts that already succeeded.
 `;
 
-const workflowGuide = `# ClipCast API workflows (polling only — no webhooks)
+const workflowGuide = `# Unsora API workflows (polling only — no webhooks)
 
 ${POSTING_GUIDE}
 ${GENERATION_GUIDE}
 ${CLIPPING_GUIDE}
 ${POSTING_RULES_GUIDE}`;
 
-export const schedulerWorkflowGuide = `# ClipCast workflows (polling only — no webhooks)
+export const schedulerWorkflowGuide = `# Unsora workflows (polling only — no webhooks)
 
 ${POSTING_GUIDE}
 ## Typical: long video → clips → scheduled posts
@@ -954,7 +938,7 @@ ${POSTING_GUIDE}
 3. create_clipping — public videoUrl (or a url from upload_file)
 4. wait_for_clipping — only in hosts without the live preview
 5. create_post (compose_post in app-capable hosts) — one post per clip, with scheduled_at
-Clips made earlier are in list_generations (type clipping).
+Clips made earlier are in list_clips.
 
 ${CLIPPING_GUIDE}
 ${POSTING_RULES_GUIDE}`;
@@ -969,7 +953,7 @@ function unsoraFor(
 export interface RegisterToolsOptions {
   /** Expose only these tools (and the widgets they render). Omit for all. */
   tools?: ReadonlySet<string>;
-  /** Markdown served as clipcast://workflows. */
+  /** Markdown served as unsora://workflows. */
   workflowGuide?: string;
 }
 
@@ -1010,19 +994,36 @@ function limitTools(server: McpServer, allowed: ReadonlySet<string>): () => void
   };
 }
 
+/**
+ * Copies each tool's `title` into `annotations.title`, which directory review
+ * reads alongside the top-level title.
+ */
+function mirrorTitles(server: McpServer): void {
+  const registerTool = server.registerTool.bind(server);
+  server.registerTool = ((name, config, cb) =>
+    registerTool(
+      name,
+      config.title && !config.annotations?.title
+        ? { ...config, annotations: { ...config.annotations, title: config.title } }
+        : config,
+      cb,
+    )) as McpServer["registerTool"];
+}
+
 export function registerTools(
   server: McpServer,
   resolveUnsora: UnsoraAuthResolver,
   options: RegisterToolsOptions = {},
 ) {
+  mirrorTitles(server);
   const removeUnusedWidgets = options.tools
     ? limitTools(server, options.tools)
     : undefined;
 
-  server.resource("clipcast-workflows", "clipcast://workflows", async () => ({
+  server.resource("unsora-workflows", "unsora://workflows", async () => ({
     contents: [
       {
-        uri: "clipcast://workflows",
+        uri: "unsora://workflows",
         mimeType: "text/markdown",
         text: options.workflowGuide ?? workflowGuide,
       },
@@ -1088,7 +1089,7 @@ export function registerTools(
             // (signed URLs live on the same hosts that serve media).
             _meta: {
               ui: resourceUiMeta(
-                AVATAR_DOMAINS,
+                [],
                 widget.uri === LIBRARY_UI_URI ? MEDIA_DOMAINS : [],
               ),
             },
@@ -1100,9 +1101,9 @@ export function registerTools(
 
   registerAppResource(
     server,
-    "ClipCast Clipping Preview",
+    "Unsora Clipping Preview",
     CLIPPING_UI_URI,
-    { description: "Live preview for AI clipping jobs (multiple clips)" },
+    { description: "Live preview for clipping jobs (multiple clips)" },
     async () => ({
       contents: [
         {
@@ -1121,7 +1122,7 @@ export function registerTools(
     {
       title: "Clip Status",
       description:
-        "Single-shot AI clipping job status + clips (used by the preview UI).",
+        "Single-shot clipping job status + clips (used by the preview UI).",
       inputSchema: { tool: z.enum(["clipping"]), id: z.string() },
       annotations: { ...READ_ONLY, idempotentHint: true },
       _meta: { ui: { resourceUri: CLIPPING_UI_URI, visibility: ["app"] } },
@@ -1137,26 +1138,22 @@ export function registerTools(
       annotations: CREATES_EXTERNAL,
       title: "Create Clips",
       description:
-        "Turn a long video into short clips (AI clipping). Use this for any request to clip, cut, " +
-        "chop, trim or repurpose a long video, podcast, stream, webinar or interview into shorts, " +
-        "Reels, TikToks or YouTube Shorts, or to find and extract specific moments or highlights " +
-        "(set query to describe the moments in natural language). Provide a public videoUrl. " +
-        "DO NOT call this tool until the user has explicitly chosen: aspect ratio, captions on/off " +
-        "(and style if on), number of clips, and clip length (not needed when query is set). " +
-        "This tool spends the user's credits — if any of these choices is missing from the " +
-        "conversation, you MUST stop and ask the user for all missing ones first. " +
-        "Never assume defaults, never infer unstated preferences. " +
-        "In app-capable hosts this renders a live preview that polls progress and displays the " +
-        "clips by itself — when the preview is rendered, do NOT call wait_for_clipping or " +
-        "clipping_status afterwards; summarize the job settings and end your turn. " +
-        "Only poll with wait_for_clipping in hosts without the preview.",
+        "Cut a long video the user owns or has rights to (podcast, stream, webinar, interview) " +
+        "into short clips for Shorts, Reels or TikTok. It finds the strongest moments, or the " +
+        "moments described in query. Use it when the user asks to clip, cut or repurpose a long " +
+        "video, or to extract specific moments or highlights. It spends the user's credits, so " +
+        "it's meant to be called once the user has chosen the aspect ratio, captions (on/off, and " +
+        "the style if on), the number of clips and the clip length (not needed when query is " +
+        "set). In app-capable hosts a live preview panel tracks progress and shows the clips, " +
+        "so wait_for_clipping isn't needed there; elsewhere wait_for_clipping returns the clips.",
       inputSchema: {
         videoUrl: z
           .string()
           .url()
           .describe(
-            "YouTube link or direct video file URL (e.g. .mp4). " +
-              "Page links from other platforms (TikTok, Instagram, Vimeo) are not supported.",
+            "YouTube link or direct video file URL (e.g. .mp4) of a video the user owns or has " +
+              "rights to clip. Page links from other platforms (TikTok, Instagram, Vimeo) are " +
+              "not supported.",
           ),
         sourceLang: z.string().optional(),
         targetLang: z.string().optional(),
@@ -1177,7 +1174,7 @@ export function registerTools(
           .enum(CLIP_RATIOS)
           .optional()
           .describe(
-            "Output aspect ratio. AI reframe keeps the main subject centered. " +
+            "Output aspect ratio. Auto-reframe keeps the main subject centered. " +
               "9:16 for TikTok/Reels/Shorts, 1:1 or 4:5 for feed posts, 16:9 for YouTube. " +
               "Omit or use 'original' to keep the source ratio.",
           ),
@@ -1243,9 +1240,9 @@ export function registerTools(
       annotations: READ_ONLY,
       title: "Wait for Clips",
       description:
-        "Poll an AI clipping job until COMPLETED or FAILED. Returns clips with output URLs. " +
-        "Do NOT use this when the live preview panel is rendered (it polls by itself) — " +
-        "only in hosts without the preview, or when the user explicitly asks for output URLs.",
+        "Poll a clipping job until COMPLETED or FAILED and return its clips with output URLs. " +
+        "For hosts without the live preview panel (the panel tracks progress itself), or when " +
+        "the output URLs are needed.",
       inputSchema: {
         clippingId: z.string(),
         maxAttempts: z.number().int().min(1).max(240).optional(),
@@ -1639,7 +1636,7 @@ export function registerTools(
 
   registerAppResource(
     server,
-    "ClipCast Voice Picker",
+    "Unsora Voice Picker",
     VOICES_UI_URI,
     { description: "Voice catalog with tap-to-play previews" },
     async () => ({
@@ -2223,7 +2220,7 @@ export function registerTools(
         "Requires paid plan. Images are fitted to each platform automatically at publish " +
         "(format, size, Instagram's 4:5–1.91:1 ratio by padding, consistent carousels); " +
         "4:5 images look best on Instagram, 9:16 suits TikTok and Reels. Posts that break " +
-        "a rule ClipCast can't fix (video length/size, image count, caption length) are " +
+        "a rule Unsora can't fix (video length/size, image count, caption length) are " +
         "rejected with an `issues` list per platform. " +
         "YouTube only takes video and uses `title` (video title). Pinterest needs media " +
         "(1 image, 2–5 images or a video). X takes text, 1 image, 2–4 images or 1 video " +
@@ -2433,9 +2430,9 @@ export function registerTools(
         "Google Business call-to-action button, video cover) and posts now, schedules or saves a draft — the composer creates the " +
         "post itself. Use it whenever the user wants to create or schedule a post and the host " +
         "can show apps; prefill everything the user already gave (caption, media URLs, " +
-        "accounts, time). After it opens, do NOT call create_post yourself; tell the user to " +
-        "finish in the composer. In hosts without app support, gather the details in chat " +
-        "and call create_post instead.",
+        "accounts, time). The user finishes in the composer, which creates the post, so " +
+        "create_post isn't needed afterwards. In hosts without app support, create_post " +
+        "creates the post from details gathered in chat.",
       inputSchema: {
         caption: z.string().optional(),
         mediaType: z
@@ -2499,7 +2496,7 @@ export function registerTools(
         "its schedule. Requires paid plan. Publishing runs in the background: this returns " +
         "status PUBLISHING straight away. Call get_post after a minute or two to see each " +
         "account's result; if some accounts fail, use retry_post. In app-capable hosts the panel " +
-        "tracks publishing live, so don't poll get_post there." + SHOWN_IN_UI,
+        "tracks publishing live." + SHOWN_IN_UI,
       inputSchema: {
         postId: z.string(),
       },
@@ -2639,29 +2636,22 @@ export function registerTools(
       annotations: CREATES_EXTERNAL,
       title: "Upload File",
       description:
-        "Upload media to the user's ClipCast library (available to every authenticated user). " +
-        "Pass a public source URL (preferred, up to 200MB) or a base64 payload for small files " +
-        "(≤ ~7MB). For larger local files use create_upload_url + complete_upload, or in hosts " +
+        "Import a file from a public URL (up to 200MB) into the user's Unsora library " +
+        "(available to every authenticated user). For files on the user's device, in hosts " +
         "that show apps call list_uploads and have the user pick the file with the panel's " +
-        "Upload button. " +
+        "Upload button; agents that can send HTTP requests can use create_upload_url + " +
+        "complete_upload. " +
         "The file is stored and recorded as an upload asset; the returned url can be used " +
         "anywhere a media URL is accepted (create_post media, clipping input)." + SHOWN_IN_UI,
       inputSchema: {
         url: z
           .string()
           .url()
-          .optional()
           .describe("Public http(s) URL of the file to import (max 200MB)."),
-        base64: z
-          .string()
-          .optional()
-          .describe(
-            "Base64 file contents (raw or data: URL). Use only for small files; prefer url.",
-          ),
         fileName: z
           .string()
           .optional()
-          .describe("File name (required with base64, optional with url)."),
+          .describe("File name. Defaults to the name in the URL."),
         contentType: z
           .string()
           .optional()
@@ -2669,12 +2659,7 @@ export function registerTools(
       },
     },
     async (args, extra) => {
-      if (!args.url && !args.base64) {
-        throw new Error("Provide either url or base64");
-      }
-      const body: Record<string, unknown> = {};
-      if (args.url) body.url = args.url;
-      if (args.base64) body.base64 = args.base64;
+      const body: Record<string, unknown> = { url: args.url };
       if (args.fileName) body.fileName = args.fileName;
       if (args.contentType) body.contentType = args.contentType;
 
@@ -2694,8 +2679,8 @@ export function registerTools(
       annotations: CREATES,
       title: "Create Upload Link",
       description:
-        "Get a one-time link for uploading a large or local file straight to the user's ClipCast " +
-        "storage (no base64, far beyond upload_file's limits). Returns uploadUrl and blobName. " +
+        "Get a one-time link for uploading a large or local file straight to the user's Unsora " +
+        "storage (any size). Returns uploadUrl and blobName. " +
         "PUT the raw file bytes to uploadUrl with the file's Content-Type, e.g. " +
         "`curl -X PUT -H \"Content-Type: video/mp4\" --data-binary @video.mp4 \"<uploadUrl>\"`, " +
         "then call complete_upload with blobName to add it to the library and get its URL. " +
@@ -2727,9 +2712,9 @@ export function registerTools(
       annotations: CREATES,
       title: "Complete Upload",
       description:
-        "Add a file uploaded through create_upload_url to the user's ClipCast library. Returns " +
+        "Add a file uploaded through create_upload_url to the user's Unsora library. Returns " +
         "the upload with its url, which works anywhere a media URL is accepted (create_post " +
-        "media, reference images, clipping input)." + SHOWN_IN_UI,
+        "media, clipping input)." + SHOWN_IN_UI,
       inputSchema: {
         blobName: z.string().min(1).describe("blobName returned by create_upload_url."),
         fileName: z.string().optional().describe("Display name for the library."),
@@ -2905,17 +2890,17 @@ export function registerTools(
 
   registerAppTool(
     server,
-    "list_generations",
+    "list_clips",
     {
       _meta: { ui: { resourceUri: LIBRARY_UI_URI } },
       annotations: READ_ONLY,
-      title: "List Generations",
+      title: "List Clips",
       description:
-        "Browse the user's past clipping jobs (type clipping), newest first, with status and " +
-        "clip URLs. Use it to find clips made earlier (e.g. to post them). Uploaded files " +
-        "are in list_uploads." + SHOWN_IN_UI,
+        "Browse the user's past clipping jobs, newest first, with status and clip URLs. Use it " +
+        "to find clips made earlier (e.g. to post them). Uploaded files are in list_uploads." +
+        SHOWN_IN_UI,
       inputSchema: {
-        type: z.enum(LIBRARY_TYPES),
+        type: z.enum(LIBRARY_TYPES).optional().describe("Library type. Defaults to clipping."),
         page: z.number().int().min(1).optional(),
         limit: z.number().int().min(1).max(100).optional(),
       },
@@ -2928,7 +2913,7 @@ export function registerTools(
       return jsonResult(
         await unsoraFor(resolveUnsora, extra.authInfo).request(
           "GET",
-          `${LIBRARY[args.type].list}${q ? `?${q}` : ""}`,
+          `${LIBRARY[args.type ?? "clipping"].list}${q ? `?${q}` : ""}`,
         ),
       );
     },
@@ -2936,14 +2921,14 @@ export function registerTools(
 
   registerAppTool(
     server,
-    "delete_generation",
+    "delete_library_item",
     {
       _meta: { ui: { resourceUri: LIBRARY_UI_URI } },
-      title: "Delete Generation",
+      title: "Delete Clip or Upload",
       description:
-        "Permanently delete one result from the user's library (type + id from " +
-        "list_generations), or an uploaded file (type upload, id from list_uploads). " +
-        "Confirm with the user first — this cannot be undone." + SHOWN_IN_UI,
+        "Permanently delete a clipping job (type clipping, id from list_clips) or an uploaded " +
+        "file (type upload, id from list_uploads) from the user's library. This cannot be " +
+        "undone, so it's meant for when the user has confirmed the deletion." + SHOWN_IN_UI,
       inputSchema: {
         type: z.enum([...LIBRARY_TYPES, "upload"]),
         id: z.string(),

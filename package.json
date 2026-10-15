@@ -1,9 +1,9 @@
 {
   "name": "@unsora/claude-mcp",
   "private": true,
-  "license": "AGPL-3.0-only",
+  "license": "UNLICENSED",
   "version": "1.0.0",
-  "description": "ClipCast: Unsora clipping and social post scheduling MCP server for Claude (Streamable HTTP)",
+  "description": "Unsora clipping and social post scheduling MCP server for Claude (Streamable HTTP)",
   "type": "module",
   "bin": {
     "unsora-claude-mcp": "./dist/index.js"

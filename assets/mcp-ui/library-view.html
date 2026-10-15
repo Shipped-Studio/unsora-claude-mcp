@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>ClipCast Library</title>
+<title>Unsora Library</title>
 <!--
-  ClipCast library (MCP Apps). Bound to list_generations, list_uploads,
-  upload_file, complete_upload and delete_generation. Normalizes every
+  Unsora library (MCP Apps). Bound to list_clips, list_uploads,
+  upload_file, complete_upload and delete_library_item. Normalizes every
   library type into { id, url, thumb, title, status } tiles; selecting one
   previews it with Download / Copy URL / Post / Delete. The type
   picker and "Load more" call the list tools again. "Upload" sends a file
@@ -70,7 +70,7 @@ select.type { width: auto; }
       return Kit.refresh();
     }
     const sc = obj(result.structuredContent);
-    // delete_generation: { success, message }
+    // delete_library_item: { success, message }
     if (sc.success && !sc.data && args.id && args.type && /delet/i.test(String(sc.message || ""))) {
       notice = "Deleted from your library.";
       type = args.type;
@@ -171,7 +171,7 @@ select.type { width: auto; }
       const a = { page: append ? page + 1 : 1, limit: PAGE_SIZE };
       const sc = type === "upload"
         ? await Kit.callTool("list_uploads", a)
-        : await Kit.callTool("list_generations", Object.assign({ type }, a));
+        : await Kit.callTool("list_clips", Object.assign({ type }, a));
       setPage(sc, append);
     } catch (err) {
       error = err.message;
@@ -187,7 +187,7 @@ select.type { width: auto; }
     busy = true;
     Kit.refresh();
     try {
-      await Kit.callTool("delete_generation", { type, id: item.id });
+      await Kit.callTool("delete_library_item", { type, id: item.id });
       items = items.filter((i) => i.id !== item.id);
       selectedId = null;
       confirmDelete = false;
@@ -213,7 +213,7 @@ select.type { width: auto; }
   }
 
   async function useInChat(item) {
-    const ok = await Kit.sendPrompt("I uploaded " + (item.title || "a file") + " to my ClipCast library: " + item.url);
+    const ok = await Kit.sendPrompt("I uploaded " + (item.title || "a file") + " to my Unsora library: " + item.url);
     Kit.flash("use", ok ? "Sent" : "Couldn't send");
   }
 
@@ -373,7 +373,7 @@ select.type { width: auto; }
   }
 
   Kit.mount(view);
-  Kit.init("clipcast-library");
+  Kit.init("unsora-library");
 })();
 </script>
 </body>

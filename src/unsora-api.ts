@@ -61,8 +61,13 @@ export class UnsoraApi {
     }
 
     if (!res.ok) {
+      // Surface the API's own message rather than the raw response body.
+      const body = data && typeof data === "object" ? (data as Record<string, unknown>) : {};
+      const detail = body.message ?? body.error ?? text;
       throw new UnsoraApiError(
-        `Unsora API ${method} ${path} failed (${res.status}): ${text}`,
+        `Unsora request failed (${res.status} on ${method} ${path}): ${
+          typeof detail === "string" && detail ? detail : res.statusText
+        }`,
         res.status,
       );
     }

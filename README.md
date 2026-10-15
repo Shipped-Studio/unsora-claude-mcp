@@ -1,6 +1,6 @@
-# ClipCast — Unsora MCP server for Claude
+# Unsora MCP server for Claude
 
-**ClipCast** is the Claude connector for Unsora: clip long videos into shorts
+The Claude connector for Unsora: clip long videos into shorts
 and schedule or publish posts. It's a standalone copy of `chatgpt-mcp` (itself
 a copy of `mono-repo/apps/mcp`) that serves only the **scheduler** tool set — the same tools as the monorepo's
 `/scheduler` endpoint. Deploy it separately
@@ -15,7 +15,7 @@ Differences from the monorepo app:
   ChatGPT build.
 - Widgets use Claude's sandbox domain (`<sha256>.claudemcpcontent.com`,
   derived from `MCP_PUBLIC_URL` + `MCP_PATH`), as in the monorepo app.
-- `server.json` is the MCP registry manifest (`com.tryunsora/clipcast`).
+- `server.json` is the MCP registry manifest (`com.tryunsora/unsora`).
 
 ```text
 Claude
@@ -77,7 +77,7 @@ CNAME clipcast → your-railway-domain
 | `MCP_PUBLIC_URL`        | required           | Public origin (OAuth metadata, icons, widget domain) |
 | `MCP_PATH`              | `/mcp`             | MCP endpoint path                            |
 | `MCP_ALLOWED_HOSTS`     | required           | Host header allowlist                        |
-| `MCP_SERVER_NAME`       | `clipcast`         | MCP server name                              |
+| `MCP_SERVER_NAME`       | `unsora-mcp`       | MCP server name                              |
 | `CLERK_PUBLISHABLE_KEY` | required           | Clerk OAuth                                  |
 | `CLERK_SECRET_KEY`      | required           | Clerk OAuth                                  |
 | `UNSORA_API_BASE_URL`   | required           | Backend API                                  |
@@ -101,10 +101,10 @@ CNAME clipcast → your-railway-domain
 | `retry_post`                | Retry failed accounts of a post                      |
 | `delete_post`               | Delete a post                                        |
 | `get_post_analytics`        | Views / likes / comments / shares of published posts |
-| `upload_file`               | Import a URL / base64 file into the library          |
+| `upload_file`               | Import a file from a public URL into the library     |
 | `list_uploads`              | List uploaded files                                  |
-| `list_generations`          | Browse past clipping jobs to post                    |
-| `delete_generation`         | Delete a clipping job or uploaded file               |
+| `list_clips`                | Browse past clipping jobs to post                    |
+| `delete_library_item`       | Delete a clipping job or uploaded file               |
 
 App-only (widget polling / pickers): `clipping_status`, `pinterest_boards`,
 `tiktok_creator_info`.
@@ -116,7 +116,7 @@ renders.
 ## Preview widgets (MCP Apps)
 
 Plain HTML/JS in `assets/mcp-ui/`, served as-is. This build exposes
-`ui://clipcast/` `account`, `accounts`, `posts`, `analytics`, `library`,
+`ui://unsora/` `account`, `accounts`, `posts`, `analytics`, `library`,
 `composer` and `clipping`. `npm run preview` opens a mock host that exercises
 the widgets without the server.
 
